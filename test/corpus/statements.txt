@@ -36,7 +36,7 @@ if ($a==0) {
       left: (variable_name (name))
       right: (integer)))
     body: (compound_statement (echo_statement (string)))
-    alternative: (else_clause
+    failure: (else_clause
       body: (compound_statement (echo_statement (string)))))
   (if_statement
     condition: (parenthesized_expression (binary_expression
@@ -48,7 +48,7 @@ if ($a==0) {
         left: (variable_name (name))
         right: (integer)))
       body: (compound_statement (echo_statement (string))))
-    alternative: (else_clause
+    failure: (else_clause
       body: (compound_statement (echo_statement (string))))))
 
 ==============================
@@ -72,14 +72,14 @@ endif;
   (if_statement
     condition: (parenthesized_expression (variable_name (name)))
     body: (echo_statement (integer))
-    alternative: (else_clause
+    failure: (else_clause
       body: (echo_statement (integer))))
   (if_statement
     condition: (parenthesized_expression (variable_name (name)))
     body: (colon_block
       (echo_statement (integer))
       (echo_statement (integer)))
-    alternative: (else_clause
+    failure: (else_clause
       body: (colon_block
         (echo_statement (integer))))))
 
@@ -185,13 +185,13 @@ switch ($a) {
   (switch_statement
     condition: (parenthesized_expression (variable_name (name)))
     body: (switch_block
-      (case_statement
+      case: (case_statement
         value: (integer)
         (echo_statement (string)) (break_statement))
-      (case_statement
+      case: (case_statement
         value: (integer)
         (echo_statement (string)) (break_statement))
-      (default_statement
+      default: (default_statement
         (echo_statement (string)) (break_statement))))
   (text_interpolation))
 
@@ -220,15 +220,15 @@ endswitch;
   (switch_statement
     condition: (parenthesized_expression (variable_name (name)))
     body: (switch_block
-      (case_statement
+      case: (case_statement
         value: (integer)
         (echo_statement (integer))
         (break_statement))
-      (case_statement
+      case: (case_statement
         value: (integer)
         (echo_statement (integer))
         (break_statement))
-      (default_statement
+      default: (default_statement
         (echo_statement (integer))
         (break_statement)))))
 
@@ -292,23 +292,23 @@ try {
   (php_tag)
   (try_statement
     body: (compound_statement)
-    (catch_clause
-      type: (type_name (name))
+    catch_clause: (catch_clause
+      type: (type_name name: (name))
       name: (variable_name (name))
       body: (compound_statement))
-    (catch_clause
-      type: (type_name (name))
+    catch_clause: (catch_clause
+      type: (type_name name: (name))
       name: (variable_name (name))
       body: (compound_statement))
-    (finally_clause
+    finally_clause: (finally_clause
       body: (compound_statement)))
   (try_statement
     body: (compound_statement
       (expression_statement (function_call_expression
-        function: (qualified_name (name))
+        function: (qualified_name name: (name))
         arguments: (arguments))))
-    (catch_clause
-      type: (type_name (name))
+    catch_clause: (catch_clause
+      type: (type_name name: (name))
       name: (variable_name (name))
       body: (compound_statement
         (expression_statement (print_intrinsic (binary_expression

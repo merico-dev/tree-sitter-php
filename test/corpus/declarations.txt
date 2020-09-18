@@ -29,11 +29,11 @@ class Exception_foo implements ThrowableInterface {
         parameters: (formal_parameters))))
   (class_declaration
     name: (name)
-    (class_interface_clause (qualified_name (name)))
+    class_interface_clause: (class_interface_clause names: (qualified_name name: (name)))
     body: (declaration_list
       (property_declaration
         (visibility_modifier)
-        (property_element (variable_name (name)) (property_initializer (string))))
+        elements: (property_element (variable_name (name)) (property_initializer (string))))
       (method_declaration
         (visibility_modifier)
         name: (name)
@@ -177,7 +177,7 @@ class A extends B {
 	(php_tag)
 	(class_declaration
 		name: (name)
-		(base_clause (qualified_name (name)))
+		base_clause: (base_clause names: (qualified_name name: (name)))
 		body: (declaration_list)))
 
 ==========================
