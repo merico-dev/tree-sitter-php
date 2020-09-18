@@ -478,7 +478,7 @@ ob_start(function($buffer) use (&$storage) { $storage .= $buffer; }, 20);
   (php_tag)
   (expression_statement
     (function_call_expression
-      function: (qualified_name (name))
+      function: (qualified_name name: (name))
       arguments: (arguments
         (anonymous_function_creation_expression
           parameters: (formal_parameters)
@@ -486,7 +486,7 @@ ob_start(function($buffer) use (&$storage) { $storage .= $buffer; }, 20);
             (echo_statement (string)))))))
   (expression_statement
     (function_call_expression
-      function: (qualified_name (name))
+      function: (qualified_name name: (name))
       arguments: (arguments
         (anonymous_function_creation_expression
           parameters: (formal_parameters (simple_parameter name: (variable_name (name))))

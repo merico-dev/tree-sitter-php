@@ -174,7 +174,7 @@ module.exports = grammar({
       optional(choice(keyword('function'), keyword('const'))),
       choice(
         seq(
-          commaSep1($.namespace_use_clause),
+          field('use_clauses', commaSep1($.namespace_use_clause)),
         ),
         seq(
           optional('\\'),
@@ -191,8 +191,8 @@ module.exports = grammar({
     ),
 
     qualified_name: $ => seq(
-      optional($.namespace_name_as_prefix),
-      choice($.name, alias($._reserved_identifier, $.name))
+      field('prefix', optional($.namespace_name_as_prefix)),
+      field('name', choice($.name, alias($._reserved_identifier, $.name)))
     ),
 
     namespace_name_as_prefix: $ => choice(
@@ -230,21 +230,21 @@ module.exports = grammar({
     interface_declaration: $ => seq(
       keyword('interface'),
       field('name', $.name),
-      optional($.base_clause),
+      field('base_clause', optional($.base_clause)),
       field('body', $.declaration_list)
     ),
 
     base_clause: $ => seq(
       keyword('extends'),
-      commaSep1($.qualified_name)
+      field('names', commaSep1($.qualified_name))
     ),
 
     class_declaration: $ => prec.right(seq(
       optional($.class_modifier),
       keyword('class'),
       field('name', $.name),
-      optional($.base_clause),
-      optional($.class_interface_clause),
+      field('base_clause', optional($.base_clause)),
+      field('class_interface_clause', optional($.class_interface_clause)),
       field('body', $.declaration_list),
       optional($._semicolon)
     )),
@@ -262,7 +262,7 @@ module.exports = grammar({
 
     class_interface_clause: $ => seq(
       keyword('implements'),
-      commaSep1($.qualified_name)
+      field('names', commaSep1($.qualified_name))
     ),
 
     _member_declaration: $ => choice(
@@ -281,7 +281,7 @@ module.exports = grammar({
 
     property_declaration: $ => seq(
       repeat1($._modifier),
-      commaSep1($.property_element),
+      field('elements', commaSep1($.property_element)),
       $._semicolon
     ),
 
@@ -476,7 +476,8 @@ module.exports = grammar({
     try_statement:  $ => seq(
       keyword('try'),
       field('body', $.compound_statement),
-      repeat1(choice($.catch_clause, $.finally_clause))
+      repeat1(choice(field('catch_clause', $.catch_clause),
+                     field('finally_clause', $.finally_clause)))
     ),
 
     catch_clause: $ => seq(
@@ -550,16 +551,16 @@ module.exports = grammar({
     for_statement: $ => seq(
       keyword('for'),
       '(',
-      optional($._expressions),
+      field('initialization', optional($._expressions)),
       ';',
-      optional($._expressions),
+      field('condition', optional($._expressions)),
       ';',
-      optional($._expressions),
+      field('update', optional($._expressions)),
       ')',
       choice(
         $._semicolon,
-        $._statement,
-        seq(':', repeat($._statement), keyword('endfor'), $._semicolon)
+        field('body', $._statement),
+        seq(':', field('statements', repeat($._statement)), keyword('endfor'), $._semicolon)
       )
     ),
 
@@ -607,12 +608,12 @@ module.exports = grammar({
         seq(
           field('body', $._statement),
           repeat(field('alternative', $.else_if_clause)),
-          optional(field('alternative', $.else_clause))
+          optional(field('failure', $.else_clause))
         ),
         seq(
           field('body', $.colon_block),
           repeat(field('alternative', alias($.else_if_clause_2, $.else_if_clause))),
-          optional(field('alternative', alias($.else_clause_2, $.else_clause))),
+          optional(field('failure', alias($.else_clause_2, $.else_clause))),
           keyword('endif'),
           $._semicolon
         )
@@ -655,12 +656,12 @@ module.exports = grammar({
     switch_block: $ => choice(
       seq(
         '{',
-        repeat(choice($.case_statement, $.default_statement)),
+        repeat(choice(field('case', $.case_statement), field('default', $.default_statement))),
         '}'
       ),
       seq(
         ':',
-        repeat(choice($.case_statement, $.default_statement)),
+        repeat(choice(field('case', $.case_statement), field('default', $.default_statement))),
         keyword('endswitch'),
         $._semicolon
       )
@@ -777,16 +778,16 @@ module.exports = grammar({
     object_creation_expression: $ => prec.right(PREC.NEW, choice(
       seq(
         'new',
-        $._class_type_designator,
-        optional($.arguments)
+        field('type_designator', $._class_type_designator),
+        field('arguments', optional($.arguments))
       ),
       seq(
         'new',
         keyword('class'),
-        optional($.arguments),
-        optional($.base_clause),
-        optional($.class_interface_clause),
-        $.declaration_list
+        field('arguments', optional($.arguments)),
+        field('base_clause', optional($.base_clause)),
+        field('class_interface_clause', optional($.class_interface_clause)),
+        field('declaration_list', $.declaration_list)
       )
     )),
 
