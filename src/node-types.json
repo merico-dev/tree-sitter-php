@@ -3080,6 +3080,25 @@
     "fields": {}
   },
   {
+    "type": "text_interpolation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "php_tag",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "throw_statement",
     "named": true,
     "fields": {},
@@ -3723,11 +3742,11 @@
   },
   {
     "type": "boolean",
-    "named": false
+    "named": true
   },
   {
     "type": "boolean",
-    "named": true
+    "named": false
   },
   {
     "type": "break",
@@ -3752,6 +3771,10 @@
   {
     "type": "clone",
     "named": false
+  },
+  {
+    "type": "comment",
+    "named": true
   },
   {
     "type": "const",
